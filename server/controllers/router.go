@@ -18,6 +18,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"bbs-go/controllers/api"
+	"bbs-go/pkg/apmiris"
 	"bbs-go/pkg/config"
 
 	"bbs-go/controllers/admin"
@@ -25,9 +26,13 @@ import (
 )
 
 func Router() {
+
 	app := iris.New()
 	app.Logger().SetLevel("warn")
 	app.Use(recover.New())
+
+	app.Use(apmiris.Middleware(app))
+
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // allows everything, use that to change the hosts.
@@ -109,6 +114,7 @@ func Router() {
 
 	server := &http.Server{Addr: ":" + config.Instance.Port}
 	handleSignal(server)
+
 	err := app.Run(iris.Server(server), iris.WithConfiguration(iris.Configuration{
 		DisableStartupLog:                 false,
 		DisableInterruptHandler:           false,

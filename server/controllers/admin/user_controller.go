@@ -17,7 +17,7 @@ import (
 	"bbs-go/services"
 )
 
-type UserController struct {
+type 	UserController struct {
 	Ctx iris.Context
 }
 

@@ -5,6 +5,8 @@ import (
 	"bbs-go/model"
 	"bbs-go/pkg/common"
 	"bbs-go/pkg/config"
+
+	//"bbs-go/pkg/mlogclub/simple/sqls"
 	"bbs-go/scheduler"
 	_ "bbs-go/services/eventhandler"
 	"flag"
@@ -57,4 +59,5 @@ func main() {
 		scheduler.Start()
 	}
 	controllers.Router()
+
 }
