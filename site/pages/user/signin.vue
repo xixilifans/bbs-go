@@ -141,10 +141,6 @@ export default {
           this.$message.error('请输入密码')
           return
         }
-        if (!this.captchaCode) {
-          this.$message.error('请输入验证码')
-          return
-        }
         const user = await this.$store.dispatch('user/signin', {
           captchaId: this.captchaId,
           captchaCode: this.captchaCode,
