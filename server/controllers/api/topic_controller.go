@@ -237,7 +237,7 @@ func (c *TopicController) GetTopics() *web.JsonResult {
 		recommend, _ = params.FormValueBool(c.Ctx, "recommend")
 		user         = services.UserTokenService.GetCurrent(c.Ctx)
 	)
-	topics, cursor, hasMore := services.TopicService.GetTopics(nodeId, cursor, recommend)
+	topics, cursor, hasMore := services.TopicService.GetTopics(nodeId, cursor, recommend, c.Ctx.Request().Context())
 	return web.JsonCursorData(render.BuildSimpleTopics(topics, user), strconv.FormatInt(cursor, 10), hasMore)
 }
 

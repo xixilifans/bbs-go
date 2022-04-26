@@ -9,6 +9,7 @@ import (
 	"bbs-go/repositories"
 	"context"
 	"html"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -127,7 +128,7 @@ func UpdateTopicIndex(topic *model.Topic) {
 	}
 }
 
-func SearchTopic(keyword string, nodeId int64, timeRange, page, limit int) (docs []TopicDocument, paging *sqls.Paging, err error) {
+func SearchTopic(keyword string, nodeId int64, timeRange, page, limit int, req *http.Request) (docs []TopicDocument, paging *sqls.Paging, err error) {
 	if initClient() == nil {
 		err = errNoConfig
 		return
@@ -169,7 +170,7 @@ func SearchTopic(keyword string, nodeId int64, timeRange, page, limit int) (docs
 		Query(query).
 		From(paging.Offset()).Size(paging.Limit).
 		Highlight(highlight).
-		Do(context.Background())
+		Do(req.Context())
 	if err != nil {
 		return
 	}

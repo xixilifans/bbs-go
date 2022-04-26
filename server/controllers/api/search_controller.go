@@ -33,7 +33,7 @@ func (c *SearchController) PostTopic() *web.JsonResult {
 		timeRange = params.FormValueIntDefault(c.Ctx, "timeRange", 0)
 	)
 
-	docs, paging, err := es.SearchTopic(keyword, nodeId, timeRange, page, 20)
+	docs, paging, err := es.SearchTopic(keyword, nodeId, timeRange, page, 20, c.Ctx.Request())
 	if err != nil {
 		return web.JsonErrorMsg(err.Error())
 	}

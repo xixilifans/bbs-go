@@ -7,6 +7,7 @@ import (
 	"bbs-go/pkg/config"
 
 	//"bbs-go/pkg/mlogclub/simple/sqls"
+	//"bbs-go/db"
 	"bbs-go/scheduler"
 	_ "bbs-go/services/eventhandler"
 	"flag"

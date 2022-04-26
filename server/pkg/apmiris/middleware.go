@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/kataras/iris/v12"
 
@@ -32,21 +33,21 @@ func Middleware(engine *iris.Application, o ...Option) iris.Handler {
 		tracer: apm.DefaultTracer,
 	}
 
-	for _, o := range o {
-		o(m)
-	}
+	// for _, o := range o {
+	// 	o(m)
+	// }
 
-	if m.requestIgnorer == nil {
-		m.requestIgnorer = apmhttp.NewDynamicServerRequestIgnorer(m.tracer)
-	}
+	// if m.requestIgnorer == nil {
+	// 	m.requestIgnorer = apmhttp.NewDynamicServerRequestIgnorer(m.tracer)
+	// }
 
 	return m.handle
 }
 
 type middleware struct {
-	engine         *iris.Application
-	tracer         *apm.Tracer
-	requestIgnorer apmhttp.RequestIgnorerFunc
+	engine *iris.Application
+	tracer *apm.Tracer
+	//requestIgnorer apmhttp.RequestIgnorerFunc
 
 	setRouteMapOnce sync.Once
 	routeMap        map[string]map[string]routeInfo
@@ -57,10 +58,13 @@ type routeInfo struct {
 }
 
 func (m *middleware) handle(irisCtx iris.Context) {
-	if !m.tracer.Recording() || m.requestIgnorer(irisCtx.Request()) {
-		irisCtx.Next()
-		return
-	}
+	// if !m.tracer.Recording() || m.requestIgnorer(irisCtx.Request()) {
+	// 	irisCtx.Next()
+	// 	return
+	// }
+
+	startTime := time.Now()
+	//path := irisCtx.Request().URL.Path
 
 	m.setRouteMapOnce.Do(func() {
 		routes := m.engine.GetRoutes()
@@ -93,6 +97,9 @@ func (m *middleware) handle(irisCtx iris.Context) {
 	defer tx.End()
 
 	body := m.tracer.CaptureHTTPRequestBody(irisCtx.Request())
+
+	tx.Context.SetCustom("time", startTime)
+
 	defer func() {
 		if err := recover(); err != nil {
 			if irisCtx.IsStopped() {

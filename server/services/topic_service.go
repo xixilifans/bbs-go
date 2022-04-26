@@ -6,6 +6,7 @@ import (
 	"bbs-go/pkg/config"
 	"bbs-go/pkg/es"
 	"bbs-go/pkg/event"
+	"context"
 	"errors"
 	"math"
 	"net/http"
@@ -287,7 +288,7 @@ func (s *topicService) GetTopicTags(topicId int64) []model.Tag {
 }
 
 // GetTopics 获取帖子分页列表
-func (s *topicService) GetTopics(nodeId, cursor int64, recommend bool) (topics []model.Topic, nextCursor int64, hasMore bool) {
+func (s *topicService) GetTopics(nodeId, cursor int64, recommend bool, ctx context.Context) (topics []model.Topic, nextCursor int64, hasMore bool) {
 	limit := 20
 	cnd := sqls.NewCnd()
 	if nodeId > 0 {
@@ -300,7 +301,7 @@ func (s *topicService) GetTopics(nodeId, cursor int64, recommend bool) (topics [
 		cnd.Eq("recommend", true)
 	}
 	cnd.Eq("status", constants.StatusOk).Desc("last_comment_time").Limit(limit)
-	topics = repositories.TopicRepository.Find(sqls.DB(), cnd)
+	topics = repositories.TopicRepository.Find(sqls.GetDbWithContext(ctx), cnd)
 	if len(topics) > 0 {
 		nextCursor = topics[len(topics)-1].LastCommentTime
 		hasMore = len(topics) >= limit

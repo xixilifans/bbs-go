@@ -1,6 +1,6 @@
 module bbs-go
 
-go 1.17
+go 1.16
 
 require (
 	github.com/88250/lute v1.7.3
@@ -30,14 +30,11 @@ require (
 require (
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
-	github.com/elastic/go-licenser v0.4.0 // indirect
-	github.com/elastic/go-sysinfo v1.7.1 // indirect
-	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/nats-io/nats.go v1.14.0 // indirect
-	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b // indirect
 	go.elastic.co/apm v1.15.0
+	go.elastic.co/apm/module/apmelasticsearch/v2 v2.0.0
+	go.elastic.co/apm/module/apmgormv2/v2 v2.0.0 // indirect
 	go.elastic.co/apm/module/apmhttp v1.15.0
-	golang.org/x/tools v0.1.9 // indirect
-	howett.net/plist v1.0.0 // indirect
+	gorm.io/driver/mysql v1.3.3
 )

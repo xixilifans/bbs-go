@@ -3,11 +3,13 @@ package es
 import (
 	"bbs-go/pkg/config"
 	"errors"
+	"net/http"
 	"sync"
 
 	"github.com/mlogclub/simple/common/strs"
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
+	"go.elastic.co/apm/module/apmelasticsearch/v2"
 )
 
 var (
@@ -24,6 +26,8 @@ func initClient() *elastic.Client {
 			index = config.Instance.Es.Index
 			client, err = elastic.NewClient(
 				elastic.SetURL(config.Instance.Es.Url),
+				elastic.SetHttpClient(&http.Client{
+					Transport: apmelasticsearch.WrapRoundTripper(http.DefaultTransport)}),
 				elastic.SetHealthcheck(false),
 				elastic.SetSniff(false),
 			)
