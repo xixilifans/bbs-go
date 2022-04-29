@@ -80,6 +80,7 @@ func Router() {
 		m.Party("/search").Handle(new(api.SearchController))
 		m.Party("/fans").Handle(new(api.FansController))
 		m.Party("/feed").Handle(new(api.FeedController))
+		//m.Party("/message").Handle(new(api.MessageController))
 	})
 
 	// admin

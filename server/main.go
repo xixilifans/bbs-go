@@ -52,6 +52,7 @@ func init() {
 	if err := sqls.Open(conf.DB.Url, gormConf, conf.DB.MaxIdleConns, conf.DB.MaxOpenConns, model.Models...); err != nil {
 		logrus.Error(err)
 	}
+
 }
 
 func main() {

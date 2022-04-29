@@ -64,6 +64,7 @@ func (m *middleware) handle(irisCtx iris.Context) {
 	// }
 
 	startTime := time.Now()
+
 	//path := irisCtx.Request().URL.Path
 
 	m.setRouteMapOnce.Do(func() {
