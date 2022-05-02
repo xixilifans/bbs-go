@@ -17,6 +17,7 @@ const (
 	TypeTopicRecommend Type = 4 // 话题被设为推荐
 	TypeTopicDelete    Type = 5 // 话题被删除
 	TypeArticleComment Type = 6 // 收到文章评论
+	TypePrivateMessage Type = 7 // 私信
 )
 
 type TopicLikeExtraData struct {

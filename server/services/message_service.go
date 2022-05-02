@@ -75,15 +75,31 @@ func (s *messageService) GetUnReadCount(userId int64) (count int64) {
 	return
 }
 
+//GetMessageList 获取消息列表
+func (s *messageService) GetMessageList(userId int64, page, pageSize int) (list []model.Message, paging *sqls.Paging) {
+	cnd := sqls.NewCnd().Eq("user_id", userId).Desc("create_time")
+	var pag = new(sqls.Paging)
+	paging.Page = page
+	paging.Limit = pageSize
+	cnd.Paging = pag
+
+	return repositories.MessageRepository.FindPageByCnd(sqls.DB(), cnd)
+}
+
 // MarkRead 将所有消息标记为已读
 func (s *messageService) MarkRead(userId int64) {
 	sqls.DB().Exec("update t_message set status = ? where user_id = ? and status = ?", msg.StatusHaveRead,
 		userId, msg.StatusUnread)
 }
 
+// 已读消息
+func (s *messageService) ReadMsg(userId, reqId int64) error {
+	return repositories.MessageRepository.UpdateColumn(sqls.DB(), reqId, "status", msg.StatusHaveRead)
+}
+
 // SendMsg 发送消息
 func (s *messageService) SendMsg(from, to int64, msgType msg.Type,
-	title, content, quoteContent string, extraData interface{}) {
+	title, content, quoteContent string, extraData interface{}) error {
 
 	t := &model.Message{
 		FromId:       from,
@@ -98,9 +114,21 @@ func (s *messageService) SendMsg(from, to int64, msgType msg.Type,
 	}
 	if err := s.Create(t); err != nil {
 		logrus.Error(err)
+		return err
 	} else {
 		s.SendEmailNotice(t)
+		return nil
 	}
+}
+
+//删除私信
+func (s *messageService) DeleteMsg(userId, reqId int64) error {
+	if userId == reqId {
+		repositories.MessageRepository.Delete(sqls.DB(), reqId)
+		return nil
+	}
+	//return repositories.MessageRepository.UpdateColumn(sqls.DB(), reqId, "status", msg.StatusDelete)
+	return nil
 }
 
 // SendEmailNotice 发送邮件通知
