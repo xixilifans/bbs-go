@@ -34,7 +34,6 @@ require (
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b // indirect
 	go.elastic.co/apm v1.15.0
 	go.elastic.co/apm/module/apmelasticsearch/v2 v2.0.0
-	go.elastic.co/apm/module/apmgormv2/v2 v2.0.0 // indirect
+	go.elastic.co/apm/module/apmgormv2/v2 v2.0.0
 	go.elastic.co/apm/module/apmhttp v1.15.0
-	gorm.io/driver/mysql v1.3.3
 )

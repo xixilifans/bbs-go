@@ -301,7 +301,8 @@ func (s *topicService) GetTopics(nodeId, cursor int64, recommend bool, ctx conte
 		cnd.Eq("recommend", true)
 	}
 	cnd.Eq("status", constants.StatusOk).Desc("last_comment_time").Limit(limit)
-	topics = repositories.TopicRepository.Find(sqls.GetDbWithContext(ctx), cnd)
+	topics = repositories.TopicRepository.Find(sqls.DB(), cnd)
+	//topics = repositories.TopicRepository.Find(sqls.GetDbWithContext(ctx), cnd)
 	if len(topics) > 0 {
 		nextCursor = topics[len(topics)-1].LastCommentTime
 		hasMore = len(topics) >= limit
